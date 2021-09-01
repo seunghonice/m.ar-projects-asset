@@ -8,9 +8,9 @@ public class BoxController : MonoBehaviour
     public float positionY = 0.4f;
     public GameObject[] prefab;
 
-    private Camera mainCamera;
-    private GameObject HoldingObject;
-    private Vector3 InputPosition;
+    protected Camera mainCamera;
+    protected GameObject HoldingObject;
+    protected Vector3 InputPosition;
 
 
     // Start is called before the first frame update
@@ -57,7 +57,7 @@ public class BoxController : MonoBehaviour
         }
     }
 
-    private void OnPut(Vector3 pos)
+    protected virtual void OnPut(Vector3 pos)
     {
         HoldingObject.GetComponent<Rigidbody>().useGravity = true;
         HoldingObject.transform.SetParent(null);
@@ -72,7 +72,7 @@ public class BoxController : MonoBehaviour
             Time.deltaTime * 7f);
     }
 
-    private void OnHold()
+    protected virtual void OnHold()
     {
         HoldingObject.GetComponent<Rigidbody>().useGravity = false;
         HoldingObject.transform.SetParent(mainCamera.transform);
@@ -84,7 +84,8 @@ public class BoxController : MonoBehaviour
     {
         var pos = mainCamera.ViewportToWorldPoint(new Vector3(
             0.5f, positionY, mainCamera.nearClipPlane * CameraDistance));
-        var obj = Instantiate(prefab[0], pos, Quaternion.identity, mainCamera.transform);
+        var index = Random.Range(0, prefab.Length);
+        var obj = Instantiate(prefab[index], pos, Quaternion.identity, mainCamera.transform);
         var rigidbody = obj.GetComponent<Rigidbody>();
         rigidbody.useGravity = false;
         rigidbody.velocity = Vector3.zero;
